@@ -1,7 +1,7 @@
 const cassandra = require('cassandra-driver');
 const client = new cassandra.Client({contactPoints: ['cass'], keyspace:'tt'});
 client.connect((err) => {
-	console.log(err);
+	console.log("STATUS Connection:" + err);
 })
 
 const express        = require('express');
