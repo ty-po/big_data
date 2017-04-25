@@ -1,8 +1,0 @@
-{
-	"name": "streaming-consumer",
-	"version": "0.0.1",
-	"main": "server.js",
-	"dependencies": {
-		"node-rest-client": "*"
-	}
-}
