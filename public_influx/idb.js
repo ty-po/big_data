@@ -32,7 +32,7 @@ module.exports = {
       precision: 'ms'
     }).catch((err)=> { console.log("Influx Write Error: " + err) })
   },
-  getQueue: function(measurement, source, cb) {
+  get: function(measurement, source, cb) {
     var query = 'select source,task_id,author from ' + measurement + (source ? ' where source = \''+ source + '\'': '')
     console.log("# " + query)
     influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (getQueue): " + err) })
@@ -44,7 +44,7 @@ module.exports = {
     console.log("# " + query)
     influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (getLatest): " + err) })
   },
-  get: function(measurement, task_id, cb) {
+  getSingle: function(measurement, task_id, cb) {
     var query = 'select * from ' + measurement + 'where task_id = \'' + task_id + '\''
     console.log("# " + query)
     influx.query(query).then((rows) => { 

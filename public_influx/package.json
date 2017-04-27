@@ -3,6 +3,8 @@
 	"version": "0.0.1",
 	"main": "server.js",
 	"dependencies": {
-    "tt-idb": "0.0.6"
+    "influx": "*",
+    "uuid": "*",
+    "express": "*"
 	}
 }
