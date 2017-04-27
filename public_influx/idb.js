@@ -18,6 +18,10 @@ const influx  = new Influx.InfluxDB({
   ]
 })
 
+function sanitize(query) {
+  return query.replace(';', "NULL")
+}
+
 module.exports = {
   push: function(date, source, author, data, cb) {
     influx.createDatabase('tt')
@@ -33,23 +37,23 @@ module.exports = {
     }).catch((err)=> { console.log("Influx Write Error: " + err) })
   },
   get: function(measurement, source, cb) {
-    var query = 'select source,task_id,author from ' + measurement + (source ? ' where source = \''+ source + '\'': '')
+    var query = sanitize('select * from ' + measurement + (source ? ' where source = \''+ source + '\'': ''))
     console.log("# " + query)
-    influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (getQueue): " + err) })
+    influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (get): " + err) })
   },
   getLatest: function(measurement, source, cb) {
-    var query = 'select source,task_id,author from ' + measurement + 
+    var query = sanitize('select source,task_id,author from ' + measurement + 
                 (source ? ' where source = \''+ source + '\'': '') + 
-                " order by time desc limit 1"
+                " order by time desc limit 1")
     console.log("# " + query)
     influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (getLatest): " + err) })
   },
   getSingle: function(measurement, task_id, cb) {
-    var query = 'select * from ' + measurement + 'where task_id = \'' + task_id + '\''
+    var query = sanitize('select * from ' + measurement + 'where task_id = \'' + task_id + '\'')
     console.log("# " + query)
     influx.query(query).then((rows) => { 
       cb(rows)
       //Mark as processed
-    }, (err) => { console.log("Influx Query Error (get): " + err) })
+    }, (err) => { console.log("Influx Query Error (getSingle): " + err) })
   },
 };
