@@ -1,4 +1,7 @@
+var idb = require('tt-idb')
+
 var schedule = require('node-schedule');
+
 var Client = require('node-rest-client').Client;
 var client = new Client();
 
@@ -6,7 +9,7 @@ var api_key = process.env.NEWS_AUTH
 var worker_id = process.env.NEWS_WORKER_ID
 var pool_size = process.env.NEWS_WORKERS
 
-//startWorker(worker_id, pool_size, api_key);
+startWorker(worker_id, pool_size, api_key);
 
 function startWorker(worker, workers, auth) {
   client.get("https://newsapi.org/v1/sources?language=en&country=us", function (data, response) {
@@ -17,29 +20,31 @@ function startWorker(worker, workers, auth) {
 
 function getAll(data, auth) {
   console.log("Fetching the following sources: " + data);
-
-  var j = schedule.scheduleJob('42 * * * * *', () => { //Every Minute on 42 secs TODO: Slow down
+  var j = schedule.scheduleJob('* /20 * * * *', () => { //Every Minute on 42 secs TODO: Slow down
     data.forEach((source) => {
-      get(source, auth)
+      console.log("Processing " + source)
+      idb.getLatest('raw', source, (res) => {
+        if(res.length > 0) last_stored = new Date(res[0].time.valueOf())
+        else last_stored = 0
+        console.log("Last Stored: " + last_stored)
+        get(source, auth, last_stored)
+      })
     })
   })
 }
 
-function get(source, auth) {
+function get(source, auth, last_stored) {
   client.get("https://newsapi.org/v1/articles?source=" + source + "&sortBy=latest&apiKey=" + auth,
               (data, response) => {
-    data.articles.forEach((article) => {
-      push(article.publishedAt, "news", data.source, article.title + '\t' + article.description);
-    })               
+    if(data.articles) {
+      data.articles.forEach((article) => {
+        date = new Date(article.publishedAt)
+        if(date > last_stored) {
+          console.log("Pushing article")
+          idb.push(date, data.source, article.author, article.title + '\t' + article.description);
+        }
+        else console.log("Skipping article")
+      })     
+    }
   });
 }
-
-function push(date, source, author, data) { //TODO: Add callback?
-  var args = {
-    data: { date: date, source: source, author: author, data: data },
-    headers: { "Content-Type": "application/json" }
-  }
-  client.post("http://cass-api:8080/raw", args, (data, response) => {
-    console.log(data)
-  })
-};

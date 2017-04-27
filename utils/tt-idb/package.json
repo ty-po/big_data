@@ -1,0 +1,9 @@
+{
+  "name": "tt-idb",
+  "version": "0.0.6",
+  "main": "tt-idb.js",
+  "dependencies": {
+    "influx": "*",
+    "uuid": "*"
+  }
+}
