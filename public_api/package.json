@@ -1,5 +1,5 @@
 {
-	"name": "testr",
+	"name": "tt-public-api",
 	"version": "0.0.1",
 	"main": "server.js",
 	"dependencies": {

@@ -9,9 +9,15 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function (req, res) {
-  idb.get("raw", false, (data) => {
-    res.send(data)
-  })
+  res.send("// W - W - W Api")
+})
+
+app.get('/stock/', function (req, res) {
+  res.send("][")
+})
+
+app.get('/stock/:symbol', function (req, res) {
+  res.send("Getting " + req.params.symbol)
 })
 
 app.get('/:measure/', function (req, res) {
