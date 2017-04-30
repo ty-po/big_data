@@ -1,6 +1,7 @@
 var express = require('express')
 var app = express()
 var idb = require('./idb')
+var stocks = require('./quotes')
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -12,21 +13,15 @@ app.get('/', function (req, res) {
   res.send("// W - W - W Api")
 })
 
-app.get('/stock/', function (req, res) {
-  res.send("][")
-})
+app.use('/stock', stocks)
 
-app.get('/stock/:symbol', function (req, res) {
-  res.send("Getting " + req.params.symbol)
-})
-
-app.get('/:measure/', function (req, res) {
+app.get('/data/:measure/', function (req, res) {
   idb.get(req.params.measure, false, (data) => {
     res.send(data)
   })
 })
 
-app.get('/:measure/:source', function (req, res) {
+app.get('/data/:measure/:source', function (req, res) {
   idb.get(req.params.measure, req.params.source, (data) => {
     res.send(data)
   })

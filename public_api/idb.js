@@ -5,14 +5,16 @@ const influx  = new Influx.InfluxDB({
   database: 'tt',
   schema: [
     {
-      measurement: 'raw',
+      measurement: 'stock',
       fields: {
-        author: Influx.FieldType.STRING,
-        data: Influx.FieldType.STRING
+        open: Influx.FieldType.FLOAT,
+        high: Influx.FieldType.FLOAT,
+        low: Influx.FieldType.FLOAT,
+        close: Influx.FieldType.FLOAT
       },
       tags: [
         'source',
-        'task_id',
+        'item_id'
       ]
     }
   ]
@@ -23,18 +25,25 @@ function sanitize(query) {
 }
 
 module.exports = {
-  push: function(date, source, author, data, cb) {
-    influx.createDatabase('tt')
-    console.log(date)
-    console.log(source)
-    influx.writePoints([{
-      measurement: 'raw',
-      tags: { source: source, task_id: uuid() },
-      fields: { author: author, data: data },
-      timestamp: date,
-    }],{
+  pushStock: function(date, symbol, open, high, low, close, cb) {
+    //influx.createDatabase('tt')
+    //console.log(date)
+    //console.log(symbol)
+
+    data = date.map((e, i) => {
+      return {
+        measurement: 'stock',
+        tags: { source: symbol, item_id: uuid() },
+        fields: { open: open[i], high: high[i], low: low[i], close: close[i] },
+        timestamp: new Date(e),
+      }
+    })
+    influx.writePoints(
+      data
+      ,{
       precision: 'ms'
-    }).catch((err)=> { console.log("Influx Write Error: " + err) })
+    }).then(() => { cb() })
+      .catch((err) => { console.log("Influx Write Error: " + err) })
   },
   get: function(measurement, source, cb) {
     var query = sanitize('select * from ' + measurement + (source ? ' where source = \''+ source + '\'': ''))
@@ -42,14 +51,14 @@ module.exports = {
     influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (get): " + err) })
   },
   getLatest: function(measurement, source, cb) {
-    var query = sanitize('select source,task_id,author from ' + measurement + 
+    var query = sanitize('select * from ' + measurement + 
                 (source ? ' where source = \''+ source + '\'': '') + 
                 " order by time desc limit 1")
     console.log("# " + query)
     influx.query(query).then((rows) => { cb(rows) }, (err) => { console.log("Influx Query Error (getLatest): " + err) })
   },
-  getSingle: function(measurement, task_id, cb) {
-    var query = sanitize('select * from ' + measurement + 'where task_id = \'' + task_id + '\'')
+  getSingle: function(measurement, item_id, cb) {
+    var query = sanitize('select * from ' + measurement + 'where item_id = \'' + item_id + '\'')
     console.log("# " + query)
     influx.query(query).then((rows) => { 
       cb(rows)

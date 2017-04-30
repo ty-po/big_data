@@ -5,6 +5,7 @@
 	"dependencies": {
     "influx": "*",
     "uuid": "*",
-    "express": "*"
+    "express": "*",
+    "request": "*"
 	}
 }

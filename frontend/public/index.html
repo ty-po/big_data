@@ -11,19 +11,17 @@
 		<div id="images"></div>
 		 
 		<script>
-		(function() {
-			var ttAPI = "http://ttdev.ty-po.com:2020/raw";
-			$.getJSON(ttAPI)
-				.done(function( data ) {
-				/*	$.each( data, function( i, item ) {
-            console.log(item)
-            $( "#images" ).append('<p>' + item.data + '</p>');
-						if ( i === 3 ) {
-							return false;
-						}
-					});*/
-				});
-		})();
+      dur()
+      function dur() {
+        var ttAPI = "http://ttdev.ty-po.com:2020/stock/aapl";
+        $.getJSON(ttAPI)
+          .done(function( data ) {
+            console.log(data)
+          })
+          .fail(function() {
+            console.log('err')
+          })
+      }
 		</script>
     <div id="chart"></div>
     <script>
