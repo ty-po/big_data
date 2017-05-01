@@ -27,11 +27,8 @@ app.get('/data/:measure/:source', function (req, res) {
   })
 })
 
+app.use('/raw', express.static('raw'))
+
 app.listen(2020, function () {
   console.log('Influx API on port 2020')
 })
-
-
-
-
-

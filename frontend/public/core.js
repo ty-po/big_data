@@ -31,7 +31,7 @@ function submit() {
 
 
 var stockChart = c3.generate({
-  bindto: '#stock',
+  bindto: '#stock-chart',
   data: {
     columns: [],
     x: 'time',
@@ -47,21 +47,66 @@ var stockChart = c3.generate({
     show: true,
     onbrush: function(d) {
       weatherChart.zoom(d)
+      conflictChart.zoom(d)
+      marriageChart.zoom(d)
     }
   }
 });
 
 var weatherChart = c3.generate({
-  bindto: '#weather',
+  bindto: '#weather-chart',
   data: {
-    columns: [
-      ['data1', 30, 200, 100, 400, 150, 250],
-      ['data2', 50, 20, 10, 40, 15, 25]
-    ]
+    url: 'http://ttdev.ty-po.com:2020/raw/weather.csv',
+    x: 'Date',
+    xFormat: '%m/%d/%Y',
+  },
+  axis: {
+    x: {
+      type: 'timeseries',
+      tick: { format: '%m/%d/%Y' }
+    }
   }
 });
 
-//getStock('aapl')
+var conflictChart = c3.generate({
+  bindto: '#conflict-chart',
+  data: {
+    url: 'http://ttdev.ty-po.com:2020/raw/conflict.csv',
+    x: 'INFORM Year',
+    xFormat: '%Y',
+  },
+  axis: {
+    x: {
+      type: 'timeseries',
+      tick: { format: '%m/%d/%Y' }
+    }
+  },
+});
+
+var marriageChart = c3.generate({
+  bindto: '#marriage-chart',
+  data: {
+    url: 'http://ttdev.ty-po.com:2020/raw/marriage.csv',
+    x: 'Year',
+    xFormat: '%m/%Y',
+  },
+  axis: {
+    x: {
+      type: 'timeseries',
+      tick: { format: '%m/%d/%Y' }
+    }
+  },
+});
+/*
+setTimeout(() => {
+  marriageChart.load({
+    url: '/small/divorce.csv',
+    x: 'Year',
+    xFormat: '%m/%Y'
+  })
+}, 1000)
+*/
+
 function getStock(symbol) {
   stockChart.unload()
   var ttAPI = "http://ttdev.ty-po.com:2020/stock/" + symbol;
