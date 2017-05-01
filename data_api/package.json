@@ -1,11 +1,11 @@
 {
-	"name": "tt-public-api",
+	"name": "tt-data-api",
 	"version": "0.0.1",
 	"main": "server.js",
 	"dependencies": {
-    "influx": "*",
-    "uuid": "*",
     "express": "*",
-    "request": "*"
+    "request": "*",
+    "amqplib": "*",
+    "uuid": "*"
 	}
 }

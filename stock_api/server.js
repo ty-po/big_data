@@ -10,7 +10,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function (req, res) {
-  res.send("// W - W - W Api")
+  res.send("// W - W - W Stock Api")
 })
 
 app.use('/stock', stocks)
@@ -27,8 +27,6 @@ app.get('/data/:measure/:source', function (req, res) {
   })
 })
 
-app.use('/raw', express.static('raw'))
-
 app.listen(2020, function () {
-  console.log('Influx API on port 2020')
+  console.log('Stock API on port 2020')
 })

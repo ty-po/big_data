@@ -1,3 +1,5 @@
+const stock_api = "http://ttdev.ty-po.com:2020"
+const data_api = "http://ttdev.ty-po.com:4040"
 
 function pluck(arr, key) { 
   return arr.map((e) => { return e[key]; }) 
@@ -56,7 +58,7 @@ var stockChart = c3.generate({
 var weatherChart = c3.generate({
   bindto: '#weather-chart',
   data: {
-    url: 'http://ttdev.ty-po.com:2020/raw/weather.csv',
+    url: data_api + '/raw/weather.csv',
     x: 'Date',
     xFormat: '%m/%d/%Y',
   },
@@ -71,7 +73,7 @@ var weatherChart = c3.generate({
 var conflictChart = c3.generate({
   bindto: '#conflict-chart',
   data: {
-    url: 'http://ttdev.ty-po.com:2020/raw/conflict.csv',
+    url: data_api + '/raw/conflict.csv',
     x: 'INFORM Year',
     xFormat: '%Y',
   },
@@ -86,7 +88,7 @@ var conflictChart = c3.generate({
 var marriageChart = c3.generate({
   bindto: '#marriage-chart',
   data: {
-    url: 'http://ttdev.ty-po.com:2020/raw/marriage.csv',
+    url: data_api + '/raw/marriage.csv',
     x: 'Year',
     xFormat: '%m/%Y',
   },
@@ -109,7 +111,7 @@ setTimeout(() => {
 
 function getStock(symbol) {
   stockChart.unload()
-  var ttAPI = "http://ttdev.ty-po.com:2020/stock/" + symbol;
+  var ttAPI = stock_api + "/stock/" + symbol;
   $.getJSON(ttAPI)
     .done((data) => {
       if(data.includes("Error")) {

@@ -1,0 +1,10 @@
+{
+	"name": "tt-worker",
+	"version": "0.0.1",
+	"main": "server.js",
+	"dependencies": {
+    "amqplib": "*",
+    "request": "*",
+    "csvtojson": "*"
+	}
+}

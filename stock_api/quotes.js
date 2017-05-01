@@ -52,16 +52,19 @@ stocks.get('/:symbol', function (req, res) {
         if (err) res.send(err)
         else if (body.includes('html')) res.send("Markit Error")
         else{
+          //console.log(body)
           data = JSON.parse(body)
-          //Store
-          quotes = data.Elements[0].DataSeries
-          console.log("Pushing " + data.Dates.length + " Points to " + req.params.symbol)
-          //console.log(data.Dates)
-          idb.pushStock(data.Dates, req.params.symbol, quotes.open.values, quotes.high.values, quotes.low.values, quotes.close.values, () => {
-            idb.get('stock', req.params.symbol, (rows) => {
-              res.send(rows)        
+          if (data.Elements.length == 0) res.send("Error Null Elements Array")
+          else {
+            quotes = data.Elements[0].DataSeries
+            console.log("Pushing " + data.Dates.length + " Points to " + req.params.symbol)
+            //console.log(data.Dates)
+            idb.pushStock(data.Dates, req.params.symbol, quotes.open.values, quotes.high.values, quotes.low.values, quotes.close.values, () => {
+              idb.get('stock', req.params.symbol, (rows) => {
+                res.send(rows)        
+              })
             })
-          })
+          }
         } 
       })
     }
