@@ -50,10 +50,10 @@ function analysis(symbol, cb) {
      // console.log(body)
       averageMonths(JSON.parse(body), stock, () => {
 
-        console.log(stock)
-        console.log(weather)  //M/1/y
+        //console.log(stock)
+        //console.log(weather)  //M/1/y
 
-        console.log(marriage) //M/Y
+        //console.log(marriage) //M/Y
         //meat here
         var sr = 0
         var sc = 0
@@ -65,42 +65,71 @@ function analysis(symbol, cb) {
           c = conflict[year]
           m = marriage[month + "/" + year]
 
+          /*
           console.log(s)
           console.log(w)
           console.log(c)
           console.log(m)
+          */
 
-          // Verbose Init //
+          // Index Calculation //
+          current = {
+            time: new Date(month + "/1/" + year).toISOString(),
+            index: 0,
+            stock: 0,
+          }
 
-          sa = s['sum'] / s['count']
-          sr += sa
-          sc += 1
+          if (s) {
+            sa = s['sum'] / s['count']
+            sr += sa
+            sc += 1
+          }
           
-          ww = w['Average Wind Speed']
-          wp = w['Precipitation']
-          ws = w['Snowfall']
-          wt = w['Averate Temperature']
+          if (w) {
+            ww = w['Average Wind Speed']
+            wp = w['Precipitation']
+            ws = w['Snowfall']
+            wt = w['Average Temperature']
+
+            ta = 55.384
+            wa = 4
+            sm = 0
+            pm = 3.56
+
+            ti = 2 * (wt / ta) - 1
+            wi = 1 - (ww / wa)
+            si = -(ws / 25)
+            pi = 1 - (wp / pm)
+
+            current.index += ti + wi + si + pi
+
+            //console.log(current.index)
+          }
           
-          cn = c['']
-          ch = c['']
-          cz = c['']
-          cs = c['']
-          cg = c['']
-          cv = c['']
-          ci = c['']
-          cf = c['']
-          cc = c['']
-          cr = c['']
+          if (c) {
+            cn = c['natural']
+            ch = c['human']
+            cz = c['hazard']
+            cs = c['socioeco']
+            cg = c['groups']
+            cv = c['vulnerability']
+            ci = c['institutional']
+            cf = c['infrastructure']
+            cc = c['capacity']
+            cr = c['risk']
+          }
+          
+          if (m) {
+            mm = m['Marriages']
+          }
 
-          mm = m['Marriages']
-
-          // End Verbose Init //
-
+          index.push(current)
+          if (index.length == Object.keys(stock).length) {
+            console.log('done')
+            cb(JSON.stringify(index))
+          }
         }
-        cb("done")//cb(index)
       })
-      
-
     }
   })
 }
