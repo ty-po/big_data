@@ -22,9 +22,9 @@ app.get('/fib/:num', function(req,res) {
 		conn.createChannel(function(err, ch) {
 			ch.assertQueue('', {exclusive: true}, function(err, q) {
 				var corr = uuid();
-				var num = parseInt(req.params.num);
+				var num = req.params.num;
 
-				console.log(' [x] Requesting fib(%d)', num);
+				console.log(' [x] Requesting ' + num);
 
 				ch.consume(q.queue, function(msg) {
 					if (msg.properties.correlationId == corr) {
