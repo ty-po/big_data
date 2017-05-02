@@ -17,14 +17,14 @@ app.get('/', function (req, res) {
 
 app.use('/raw', express.static('raw'))
 
-app.get('/fib/:num', function(req,res) {
+app.get('/index/:sym', function(req,res) {
 	amqp.connect('amqp://rabbit-pq', function(err, conn) {
 		conn.createChannel(function(err, ch) {
 			ch.assertQueue('', {exclusive: true}, function(err, q) {
 				var corr = uuid();
-				var num = req.params.num;
+				var sym = req.params.sym;
 
-				console.log(' [x] Requesting ' + num);
+				console.log(' [x] Requesting ' + sym);
 
 				ch.consume(q.queue, function(msg) {
 					if (msg.properties.correlationId == corr) {
@@ -34,7 +34,7 @@ app.get('/fib/:num', function(req,res) {
 				}, {noAck: true});
 
 				ch.sendToQueue('rpc_queue',
-				new Buffer(num.toString()),
+				new Buffer(sym.toString()),
 				{ correlationId: corr, replyTo: q.queue });
 			});
 		});

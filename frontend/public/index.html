@@ -1,46 +1,80 @@
 <html>
 	<head>
-		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<title>W3 Index</title>	
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cyborg/bootstrap.min.css
+	">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css" rel="stylesheet" type="text/css">
 
+	<style>
+		h1 {
+			text-align:center;
+			color:black;
+			font-family:arial;
+		}
+		.search-bar{
+			font-size: 14pt;
+			color:black;
+			margin:10pt;
+			text-align:left;
+			font-family:arial
+		}
+		h2 {
+			text-align:left;
+			color:black;
+			font-family:arial;
+		}
+		.footer {
+			font-size: 10pt;
+			text-align:center;
+			color:black;
+			font-family:arial;
+		}
+	</style>
+	<style type="text/css">
+		body { background: beige  !important; }
+	</style>
 
 	</head>
   <body>
-    <h1> WWW </h1>
-    <div id="search-bar">
+	<h1> W3 Index </h1>
+	<text class="search-bar"> Enter Company Ticker Symbol</text>
+	<div id="" class="search-bar">
       <input id="search"></input><button id="go">Go</button>
       <p id="status"></p>
-    </div>
+    </div>  
     <br>
 
-    <div id="stock">
+    <div id="stock" class="container-fluid">
       <h2 id="stock-title"></h2>
       <div id="stock-chart"></div>
     </div>
 
-    <div id="index">
-      <h2 id="index-title"></h2>
+    <div id="index" class="container-fluid">
+      <h2 id="index-title"> W3 Index</h2>
       <div id="index-chart"></div>
     </div>
 
-    <div id="weather">
+    <div id="weather" class="container-fluid">
       <h2 id="weather-title">Weather</h2>
       <div id="weather-chart"></div>
     </div>
 
-    <div id="conflict">
+    <div id="conflict" class="container-fluid">
       <h2 id="conflict-title">Conflict</h2>
       <div id="conflict-chart"></div>
     </div>
 
-    <div id="marriage">
+    <div id="marriage" class="container-fluid">
       <h2 id="marriage-title">Marriage</h2>
       <div id="marriage-chart"></div>
     </div>
-
+    </br>
+	<text class="footer">Built by Tyler Polen and Jack Panetta</text>
     <script src="/core.js"></script>
+    
   </body>
 </html>
