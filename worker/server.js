@@ -20,7 +20,7 @@ prefetch(() => {
   amqp.connect('amqp://rabbit-pq', function(err, conn) {
 
    conn.createChannel(function(err, ch) {
-      var q = 'rpc_queue';
+      var q = 'job_q';
 
       ch.assertQueue(q, {durable: false});
       ch.prefetch(1);
@@ -44,7 +44,7 @@ prefetch(() => {
 })
 
 function analysis(symbol, cb) {
-  request(stock_api + '/stock/' + symbol, (err, wres,body) => {
+  request(stock_api + '/data/stock/' + symbol, (err, wres, body) => {
     if (err) return err
     else {
      // console.log(body)
@@ -102,8 +102,6 @@ function analysis(symbol, cb) {
             pi = 1 - (wp / pm)
 
             current.index += ti + wi + si + pi
-
-            //console.log(current.index)
           }
           
           if (c) {

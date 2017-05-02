@@ -116,11 +116,35 @@ var marriageChart = c3.generate({
   },
 });
 
+$("#load").click(() => {
+  console.log("here")
+  var indexAPI = data_api + "/index/" + symbol
+  $.getJSON(indexAPI)
+    .done((data) => {
+      if(data.includes("Error")) {
+        return;
+      }
+      setTimeout(() => {
+        indexChart.load({
+          x: 'time',
+          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ',
+          json: data,
+          keys: {
+            x: 'time',
+            value: ['index', 'stock'],
+          },  
+        })
+      }, 1000)
+    })
+    .fail(function() {
+      console.log('err')
+    })
+})
 
 function getStock(symbol) {
   stockChart.unload()
+  indexChart.unload()
   var ttAPI = stock_api + "/stock/" + symbol;
-  var indexAPI = data_api + "/index/" + symbol
   $.getJSON(ttAPI)
     .done((data) => {
       if(data.includes("Error")) {
@@ -147,25 +171,5 @@ function getStock(symbol) {
     .fail(function() {
       console.log('err')
       $("#status").text("Stock not found")
-    })
-  $.getJSON(indexAPI)
-    .done((data) => {
-      if(data.includes("Error")) {
-        return;
-      }
-      setTimeout(() => {
-        indexChart.load({
-          x: 'time',
-          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ',
-          json: data,
-          keys: {
-            x: 'time',
-            value: ['index', 'stock'],
-          },  
-        })
-      }, 1000)
-    })
-    .fail(function() {
-      console.log('err')
     })
 }

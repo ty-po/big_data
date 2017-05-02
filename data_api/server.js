@@ -33,7 +33,7 @@ app.get('/index/:sym', function(req,res) {
 					}
 				}, {noAck: true});
 
-				ch.sendToQueue('rpc_queue',
+				ch.sendToQueue('job_q',
 				new Buffer(sym.toString()),
 				{ correlationId: corr, replyTo: q.queue });
 			});
