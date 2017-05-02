@@ -22,7 +22,7 @@ stocks.get('/:symbol', function (req, res) {
     if (weekday == 0) last_business_day -= (86400000) * 2
     if (weekday == 1) last_business_day -= (86400000) * 3
 
-    last_business_day = new Date(last_business_day)
+    last_business_day = new Date(last_business_day - 66400000)
     last_business_day.setHours(0,0,0,0) 
 
     console.log(last_business_day)
