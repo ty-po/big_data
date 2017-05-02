@@ -31,12 +31,15 @@ prefetch(() => {
 
         console.log("Analyzing " + symbol.toString());
 
-        analysis(symbol, (res) => {
+        analysis(symbol.toString(), (res) => {
           ch.sendToQueue(msg.properties.replyTo,
             new Buffer(res),
             {correlationId: msg.properties.correlationId});
 
-          ch.ack(msg); 
+          ch.ack(msg);
+          console.log("resetting")
+          index = []
+          stock = {}
         });
       });
     });
@@ -45,9 +48,11 @@ prefetch(() => {
 
 function analysis(symbol, cb) {
   request(stock_api + '/data/stock/' + symbol, (err, wres, body) => {
-    if (err) return err
+    if (body == "[]") return cb("err")
+    else if (err) return cb("err")
     else {
-     // console.log(body)
+
+      console.log("computing")
       averageMonths(JSON.parse(body), stock, () => {
 
         //console.log(stock)
@@ -83,6 +88,7 @@ function analysis(symbol, cb) {
             sa = s['sum'] / s['count']
             sr += sa
             sc += 1
+            current.stock = sa / (sr / sc / 10) - 10
           }
           
           if (w) {
